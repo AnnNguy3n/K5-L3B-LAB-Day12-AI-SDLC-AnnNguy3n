@@ -23,7 +23,7 @@ class InputState:
         return name in self._edges
 
 
-def load_frames(path, buttons=BUTTONS_V10):
+def load_frames(path, buttons=BUTTONS_V10, allow_buy=False):
     if path is None:
         return []
     try:
@@ -36,6 +36,8 @@ def load_frames(path, buttons=BUTTONS_V10):
     last = -1
     frames = []
     allowed = {"tick", "move", *buttons}
+    if allow_buy:
+        allowed.add("buy")
     for i, fr in enumerate(data["frames"]):
         if not isinstance(fr, dict):
             raise BadInput(f"frame {i} không phải object")
@@ -48,6 +50,8 @@ def load_frames(path, buttons=BUTTONS_V10):
         if t <= last:
             raise BadInput(f"frame {i}: tick trùng hoặc giảm")
         last = t
+        if "buy" in fr and (not isinstance(fr["buy"], str) or not fr["buy"]):
+            raise BadInput("buy cần chuỗi khác rỗng")
         if "move" in fr:
             m = fr["move"]
             ok = (isinstance(m, list) and len(m) == 2 and

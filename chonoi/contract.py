@@ -17,13 +17,17 @@ def _between(name, v, lo, hi):
         raise BadInput(f"tuning.{name} phải trong [{lo}, {hi}], đang là {v!r}")
 
 
-def load_contract(path=DEFAULT_PATH) -> dict:
+LEGACY_PATH = os.path.join(os.path.dirname(DEFAULT_PATH), "docs", "contracts", "v1.0.json")
+
+
+def load_contract(path=LEGACY_PATH) -> dict:
     try:
         with open(path, encoding="utf-8") as f:
             c = json.load(f)
     except (OSError, ValueError) as e:
         raise BadInput(f"không đọc được {path}: {e}")
-    validate_tuning(c.get("tuning"))
+    if c.get("contract_version") == "1.0":
+        validate_tuning(c.get("tuning"))
     return c
 
 

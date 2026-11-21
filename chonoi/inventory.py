@@ -27,7 +27,7 @@ def validate_items(items, kinds=KINDS_P1):
     return out
 
 
-def read_inventory(path: str, kinds=KINDS_P1) -> dict:
+def read_inventory(path: str, kinds=KINDS_P1, *, individual=False):
     try:
         with open(path, encoding="utf-8") as f:
             data = json.load(f)
@@ -35,6 +35,10 @@ def read_inventory(path: str, kinds=KINDS_P1) -> dict:
         raise BadInput(f"không đọc được file kho {path}: {e}")
     if not isinstance(data, dict) or set(data.keys()) != {"items"}:
         raise BadInput("file kho chỉ được có khóa gốc 'items'")
+    if individual:
+        if not isinstance(data["items"], list):
+            raise BadInput("v1.2 cần kho cá thể")
+        return data["items"]
     return validate_items(data["items"], kinds)
 
 
@@ -47,7 +51,8 @@ def hold_to_items(hold: list) -> dict:
 
 
 def write_inventory(path: str, items: dict):
-    items = {k: items[k] for k in sorted(items) if items[k] > 0}
+    if isinstance(items, dict):
+        items = {k: items[k] for k in sorted(items) if items[k] > 0}
     d = os.path.dirname(os.path.abspath(path))
     fd, tmp = tempfile.mkstemp(prefix=".inv-", suffix=".tmp", dir=d)
     try:

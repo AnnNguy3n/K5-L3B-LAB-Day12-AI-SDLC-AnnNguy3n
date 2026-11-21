@@ -1,0 +1,57 @@
+{
+  "frames": [
+    {
+      "tick": 0,
+      "catch": true,
+      "move": [
+        -1,
+        -1
+      ]
+    },
+    {
+      "tick": 67,
+      "move": [
+        0,
+        0
+      ],
+      "interact": true
+    },
+    {
+      "tick": 68,
+      "interact": false,
+      "catch": false
+    },
+    {
+      "tick": 188,
+      "interact": true
+    },
+    {
+      "tick": 189,
+      "interact": false
+    },
+    {
+      "tick": 549,
+      "interact": true
+    },
+    {
+      "tick": 550,
+      "interact": false,
+      "move": [
+        1,
+        -1
+      ]
+    },
+    {
+      "tick": 683,
+      "move": [
+        0,
+        0
+      ],
+      "interact": true
+    },
+    {
+      "tick": 1368,
+      "shop_done": true
+    }
+  ]
+}

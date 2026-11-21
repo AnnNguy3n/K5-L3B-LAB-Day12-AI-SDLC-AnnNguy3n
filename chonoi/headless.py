@@ -7,7 +7,8 @@ import argparse
 import os
 import sys
 
-from .contract import load_contract
+from .contract import DEFAULT_PATH, LEGACY_PATH, load_contract
+from .campaign import BUTTONS, run_campaign
 from .errors import BadInput
 from .inputs import load_frames
 from .inventory import read_inventory
@@ -34,6 +35,8 @@ def _int(name):
 def main(argv=None) -> int:
     p = _Parser(prog="chonoi.headless")
     p.add_argument("--mode", required=True, choices=["gather", "quan", "day"])  # `day` có từ v1.1
+    p.add_argument("--rules", choices=["1.0", "1.2"], default="1.2")
+    p.add_argument("--days", type=_int("days"))
     p.add_argument("--seed", required=True, type=_int("seed"))
     p.add_argument("--ticks", required=True, type=_int("ticks"))
     p.add_argument("--out", required=True)
@@ -44,7 +47,9 @@ def main(argv=None) -> int:
     p.add_argument("--snapshot-every", dest="snapshot_every", type=_int("snapshot-every"), default=10)
     a = p.parse_args(argv)
     try:
-        if a.mode == "day":
+        if a.days is not None and (a.mode != "day" or not 1 <= a.days <= 5):
+            raise BadInput("--days chỉ dùng với day, nhận 1 đến 5")
+        if a.mode == "day" and a.rules == "1.0":
             raise BadInput("--mode day chưa hỗ trợ ở contract v1.0 (có từ v1.1)")
         if a.ticks < 0:
             raise BadInput("--ticks phải >= 0")
@@ -59,17 +64,25 @@ def main(argv=None) -> int:
         paths = [os.path.abspath(x) for x in outs + ins]
         if len(set(paths)) != len(paths):
             raise BadInput("các đường dẫn đầu vào/đầu ra phải khác nhau")
-        contract = load_contract()
+        contract = load_contract(LEGACY_PATH if a.rules == "1.0" else DEFAULT_PATH)
         tuning = contract["tuning"]
         scenario = load_scenario(a.scenario, a.mode, tuning)
-        frames = load_frames(a.inputs)
-        inventory = read_inventory(a.inventory) if a.inventory else None
+        if a.rules == "1.2":
+            frames = load_frames(a.inputs, BUTTONS, allow_buy=True)
+            inventory = read_inventory(a.inventory, individual=True) if a.inventory else None
+        else:
+            frames = load_frames(a.inputs)
+            inventory = read_inventory(a.inventory) if a.inventory else None
         if inventory is not None and "stock" in scenario:
             raise BadInput("vừa có quan.stock vừa có --inventory")
     except BadInput as e:
         sys.stderr.write(f"đầu vào sai: {e}\n")
         return 2
     try:
+        if a.rules == "1.2":
+            run_campaign(a.mode, tuning, scenario, a.seed, frames, a.ticks, a.out, a.snapshot_every,
+                         a.days or 1, inventory, a.inventory_out)
+            return 0
         run(a.mode, tuning, scenario, a.seed, frames, a.ticks, a.out, a.snapshot_every,
             inventory=inventory, inventory_out=a.inventory_out)
     except BadInput as e:  # lỗi mức luật phát hiện lúc dựng sim

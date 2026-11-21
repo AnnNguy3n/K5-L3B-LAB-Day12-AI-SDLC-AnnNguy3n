@@ -87,6 +87,7 @@ class GatherSim:
                 n["regrow_ticks"] -= 1
                 if n["regrow_ticks"] == 0:
                     events.append(("node_regrown", {"node_id": n["id"]}))
+        self._age_hold(events)
         # 2. bơi + chặn mép
         was_surface = self._at_surface()
         self._move(inp)
@@ -94,6 +95,8 @@ class GatherSim:
         if was_surface != surface:
             events.append(("surface" if surface else "dive", {"pos": list(self.pos)}))
         self._breathe(surface, events)
+        if not self.done:
+            self._encounters(events)
         if self.done:
             return events
         if inp.pressed("interact"):
@@ -119,15 +122,15 @@ class GatherSim:
             self.oxygen_ticks -= 1
             if self.oxygen_ticks:
                 return
-            events.append(("oxygen_empty", {"pos": list(self.pos)}))
+            events.append(("oxygen_empty", {"oxygen_ticks": 0}))
         self.zero_oxy_ticks += 1
         if self.zero_oxy_ticks >= self.t["choke_interval_ticks"]:
             self.zero_oxy_ticks = 0
             self.hp -= 1
             events.append(("choke", {"hp": self.hp}))
             if self.hp == 0:
+                events.append(("faint", {"cause": "choke", "lost": self.hold[::-1], "hp": 0}))
                 self.hold.clear()
-                events.append(("faint", {"pos": list(self.pos)}))
                 self._finish("fainted", events)
 
     def _collect(self, fishing, events):
@@ -144,15 +147,26 @@ class GatherSim:
         quantity = self.t["fish_yield"][kind] if fishing else self.t["node_yield"]
         data = {"fish_id" if fishing else "node_id": target["id"], "kind": kind}
         if len(self.hold) + quantity > self.t["hold_capacity"]:
-            events.append(("hold_full", data))
+            events.append(("hold_full", {"action": "catch" if fishing else "gather",
+                                         "fish_id" if fishing else "node_id": target["id"],
+                                         "required": quantity, "free": self.t["hold_capacity"] - len(self.hold)}))
             return
-        self.hold.extend([kind] * quantity)
+        self._add_items(kind, quantity)
         if fishing:
             self.fish.remove(target)
             self.catch_cd_ticks = round(self.t["catch_cooldown_s"] * self.hz)
         else:
             target["regrow_ticks"] = round(self.t["regrow_s"] * self.hz)
-        events.append(("fish_caught" if fishing else "gather", dict(data, qty=quantity)))
+        events.append(("fish_caught" if fishing else "gather", {**data, "yield" if fishing else "amount": quantity}))
+
+    def _encounters(self, events):
+        pass  # v1.0 chỉ có ngạt.
+
+    def _add_items(self, kind, quantity):
+        self.hold.extend([kind] * quantity)
+
+    def _age_hold(self, events):
+        pass  # Giỏ đếm của v1.0.
 
     def _at_surface(self) -> bool:
         return self.pos[1] <= self.t["surface_depth"]

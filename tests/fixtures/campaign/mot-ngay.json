@@ -1,0 +1,31 @@
+{
+  "gather": {
+    "player": {
+      "pos": [
+        6,
+        2
+      ]
+    },
+    "fish": [
+      {
+        "id": "F1",
+        "kind": "ca_loc",
+        "pos": [
+          6,
+          2
+        ]
+      }
+    ],
+    "random_fish": false,
+    "monsters": []
+  },
+  "quan": {
+    "player": {
+      "pos": [
+        2,
+        8
+      ]
+    },
+    "time_left_ticks": 1300
+  }
+}

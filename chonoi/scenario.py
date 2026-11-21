@@ -4,9 +4,10 @@ Kiểm cấu trúc fixture tại đây. QuanSim kiểm giữ chỗ và món sau 
 """
 
 import json
+import math
 
 from .errors import BadInput
-from .inventory import KINDS_P1, validate_items
+from .inventory import validate_items
 
 GATHER_KEYS = {"player", "hold", "nodes", "fish", "random_fish", "time_left_ticks"}
 GATHER_PLAYER_KEYS = {"pos", "vel", "heading_deg", "hp", "oxygen_ticks", "zero_oxy_ticks",
@@ -38,14 +39,27 @@ def load_scenario(path, mode: str, tuning: dict) -> dict:
             data = json.load(f)
     except (OSError, ValueError) as e:
         raise BadInput(f"không đọc được scenario {path}: {e}")
+    if mode == "day":
+        if not isinstance(data, dict) or set(data) - {"gather", "quan", "day"}:
+            raise BadInput("scenario day cần các khối gather, quan hoặc day")
+        for part in ("gather", "quan"):
+            validate_block(data.get(part, {}), part, tuning)
+        if {"stock", "reputation"} & data.get("quan", {}).keys():
+            raise BadInput("day nhận kho từ gather và uy tín từ day")
+        return data
     if not isinstance(data, dict) or not set(data) <= {"gather", "quan"}:
         raise BadInput("scenario chỉ được có khối 'gather' hoặc 'quan'")
     if set(data) - {mode}:
         raise BadInput(f"khối sai mode: chạy --mode {mode} chỉ nhận khối '{mode}'")
-    block = data.get(mode, {})
+    return validate_block(data.get(mode, {}), mode, tuning)
+
+
+def validate_block(block, mode, tuning):
     if not isinstance(block, dict):
         raise BadInput(f"khối {mode} phải là object")
     allowed = GATHER_KEYS if mode == "gather" else QUAN_KEYS
+    if mode == "gather" and "freshness" in tuning:
+        allowed = allowed | {"monsters"}
     extra = set(block) - allowed
     if extra:
         raise BadInput(f"trường lạ/chưa hỗ trợ trong {mode}: {sorted(extra)}")
@@ -62,7 +76,7 @@ def load_scenario(path, mode: str, tuning: dict) -> dict:
 
 
 def _num(v):
-    return isinstance(v, (int, float)) and not isinstance(v, bool)
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v)
 
 
 def _nonneg_int(name, v):
@@ -79,6 +93,11 @@ def _pos(name, pos, bounds, axes=("x", "d")):
             raise BadInput(f"{name} nằm ngoài vùng nước ({axis} ∈ [{lo}, {hi}])")
 
 
+def _fields(row, allowed):
+    if set(row) - set(allowed):
+        raise BadInput(f"trường lạ: {sorted(set(row) - set(allowed))}")
+
+
 def _validate_gather(b, tuning):
     g = tuning["gather"]
     bounds = g["bounds"]
@@ -88,8 +107,13 @@ def _validate_gather(b, tuning):
     if "random_fish" in b and not isinstance(b["random_fish"], bool):
         raise BadInput("random_fish phải là boolean")
     if "hold" in b:
+        allowed_kinds = list(g["fish_yield"]) + [n["kind"] for n in g["nodes"]]
         h = b["hold"]
-        if not isinstance(h, list) or any(k not in KINDS_P1 for k in h):
+        if "freshness" in tuning:
+            from .sim.fresh import Pantry
+            pantry = Pantry(h, tuning, "hold")
+            h = [kind for kind, _ in pantry.data.values()]
+        if not isinstance(h, list) or any(k not in allowed_kinds for k in h):
             raise BadInput("hold phải là mảng id nguyên liệu hợp lệ")
         if len(h) > g["hold_capacity"]:
             raise BadInput("hold vượt sức chứa")
@@ -120,8 +144,33 @@ def _validate_gather(b, tuning):
             raise BadInput("player.zero_oxy_ticks phải nhỏ hơn chu kỳ ngạt")
         if p["zero_oxy_ticks"] > 0 and not (oxy == 0 and pos[1] > g["surface_depth"]):
             raise BadInput("player.zero_oxy_ticks > 0 chỉ khi oxy = 0 và đang dưới nước")
+    if "monsters" in b:
+        _check_ids("monsters", b["monsters"])
+        for m in b["monsters"]:
+            _fields(m, ("id","kind","pos","waypoints","target_idx","state","state_ticks_left","recoil_dir"))
+            if m.get("kind") != "ca_sau":
+                raise BadInput("loài thủy quái ngoài danh mục")
+            region = dict(bounds, d=g["monsters"]["species"]["ca_sau"]["depths"])
+            _pos("monsters.pos", m.get("pos"), region)
+            points = m.get("waypoints")
+            if not isinstance(points, list) or len(points) != 2:
+                raise BadInput("cần hai điểm tuần tra")
+            for point in points:
+                _pos("waypoint", point, region)
+            state = m.get("state", "patrol")
+            ticks = m.get("state_ticks_left", 0)
+            _nonneg_int("state_ticks_left", ticks)
+            if state not in ("patrol","chase","recoil") or (state == "recoil") != (ticks > 0):
+                raise BadInput("trạng thái tuần tra mâu thuẫn")
+            vec = m.get("recoil_dir")
+            if state == "recoil":
+                if not isinstance(vec,list) or len(vec)!=2 or not all(_num(x) for x in vec) or not math.isclose(math.hypot(*vec),1):
+                    raise BadInput("hướng lùi cần là vector đơn vị")
+            elif vec is not None:
+                raise BadInput("chỉ thủy quái đang lùi mới có hướng lùi")
     for n in b.get("nodes", []):
-        if n.get("kind") not in NODE_KINDS:
+        _fields(n, ("id","kind","pos","regrow_ticks"))
+        if n.get("kind") not in [e["kind"] for e in g["nodes"]]:
             raise BadInput(f"nodes.{n['id']}: kind phải là một trong {NODE_KINDS}")
         _pos(f"nodes.{n['id']}.pos", n.get("pos"), bounds)
         if n["pos"][1] != 0:
@@ -129,7 +178,12 @@ def _validate_gather(b, tuning):
         if "regrow_ticks" in n:
             _nonneg_int(f"nodes.{n['id']}.regrow_ticks", n["regrow_ticks"])
     for f in b.get("fish", []):
-        if f.get("kind") not in FISH_KINDS:
+        fields = {"id", "kind", "pos", "heading_deg"}
+        if "freshness" in tuning:
+            fields.add("age_ticks")
+            _nonneg_int("age_ticks", f.get("age_ticks", 0))
+        _fields(f, fields)
+        if f.get("kind") not in g["fish_yield"]:
             raise BadInput(f"fish.{f['id']}: kind phải là một trong {FISH_KINDS}")
         _pos(f"fish.{f['id']}.pos", f.get("pos"), bounds)
         if f["pos"][1] <= g["surface_depth"]:
@@ -143,7 +197,11 @@ def _validate_quan(b, tuning):
         if arr in b:
             _check_ids(arr, b[arr])
     if "stock" in b:
-        validate_items(b["stock"])
+        if "freshness" in tuning:
+            from .sim.fresh import Pantry
+            Pantry(b["stock"], tuning, "stock")
+        else:
+            validate_items(b["stock"])
     p = b.get("player", {})
     if not isinstance(p, dict) or set(p) - QUAN_PLAYER_KEYS:
         raise BadInput("quan.player chỉ có pos và vel")
@@ -154,11 +212,14 @@ def _validate_quan(b, tuning):
         raise BadInput("player.vel phải là [x, z]")
     for group in ("tables", "stoves"):
         for entity in b.get(group, []):
+            _fields(entity, ("id","pos") if group == "tables" else ("id","pos","state","dish","cook_ticks_left","ready_ticks"))
             if "pos" in entity:
                 _pos(f"{group}.{entity['id']}.pos", entity["pos"], qb, axes=("x", "z"))
     table_ids = [c.get("table_id") for c in b.get("customers", [])]
     known = {t["id"] for t in tuning["quan"]["tables"]} | {t.get("id") for t in b.get("tables", [])}
     for c in b.get("customers", []):
+        _fields(c, ("id","table_id","dish_id","order_tick","state","patience_ticks_left","eat_ticks_left","order_status","reserved","base_price","tip"))
+        _nonneg_int("order_tick", c.get("order_tick", 0))
         if not isinstance(c.get("table_id"), str) or c["table_id"] not in known:
             raise BadInput(f"customers.{c['id']}: table_id phải là bàn có thật")
     if len(table_ids) != len(set(table_ids)):

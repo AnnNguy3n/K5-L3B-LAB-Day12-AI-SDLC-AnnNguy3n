@@ -71,18 +71,18 @@ class QuanRules(unittest.TestCase):
         self.assertEqual([e["name"] for e in log], ["no_dish"])
         self.assertFalse(s["customers"])
 
-    def test_expiry_before_interaction(self):
+    def test_serve_at_patience_deadline(self):
         dish = "ca_loc_nuong_trui"
-        s, log = simulate("quan", {"player": {"pos": [9, 2]}, "hand": dish, "customers": [
-            {"id": "C1", "dish_id": dish, "table_id": "T1", "state": "assigned", "patience_ticks_left": 1}]},
+        s, log = simulate("quan", {"player": {"pos": [9, 2]}, "hand": {"order_id": "C1", "dish_id": dish, "base_price": 60}, "customers": [
+            {"id": "C1", "dish_id": dish, "table_id": "T1", "order_status": "assigned", "patience_ticks_left": 1}]},
             1, [{"tick": 0, "interact": True}])
-        self.assertEqual([e["name"] for e in log], ["customer_left"])
+        self.assertEqual([e["name"] for e in log], ["served"])
         self.assertIsNone(s["hand"])
-        self.assertFalse(s["customers"])
+        self.assertEqual(s["customers"][0]["state"], "eating")
 
     def test_reserved_stock_and_dish_consistency(self):
         customer = {"id": "C1", "table_id": "T1", "dish_id": "ca_loc_nuong_trui"}
-        for scenario in ({"customers": [customer]}, {"customers": [dict(customer, state="assigned")]},
+        for scenario in ({"customers": [customer]}, {"customers": [dict(customer, order_status="assigned")]},
                          {"customers": [dict(customer, state="eating", eat_ticks_left=2)]}):
             with self.subTest(scenario=scenario), self.assertRaises(BadInput):
                 simulate("quan", scenario, 0)
