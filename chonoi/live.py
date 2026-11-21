@@ -27,6 +27,7 @@ from .inputs import LiveInputs
 from .inventory import read_inventory
 from .runner import Session
 from .scenario import load_scenario
+from .sim.river_live import RiverFish
 
 WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 TICK_S = 1.0 / 60.0
@@ -51,6 +52,7 @@ class LiveGame:
     def _reset(self):
         self.session = Session(*self._args)
         self.morning_result = None
+        self.river_fish = RiverFish(self.session.sim) if self.mode == "day" else None
         self.inputs = LiveInputs()
         self.events = []
         self._saved = False
@@ -88,12 +90,15 @@ class LiveGame:
         s = self.session
         if s.done:
             return
+        if self.river_fish is not None:
+            self.river_fish.advance(s.sim)
         for row in s.step(self.inputs.advance()):
             self.events.append(row)
         del self.events[:-RECENT_EVENTS]
         if self.mode == "day" and s.done and s.mode == "gather":
             items = s.sim.inventory_items()
             self.morning_result = {"reason": s.sim.reason, "items": items}
+            self.river_fish = None
             self.session = Session("quan", self.tuning, {}, self.seed, inventory=items)
             self.inputs = LiveInputs()
             return

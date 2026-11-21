@@ -1,0 +1,5 @@
+{
+  "swim_speed": 0.85,
+  "spawn_interval_s": 15,
+  "spawn_min_depth": 2
+}

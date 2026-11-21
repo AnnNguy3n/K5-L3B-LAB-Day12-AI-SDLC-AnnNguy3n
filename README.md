@@ -58,3 +58,5 @@ Hết giờ mỗi phase thì gắn tag rồi đi tiếp; chỗ chưa xong ghi tr
 ## Sáng tạo của nhóm
 
 Trong bài cá nhân, em thêm chế độ chơi trọn ngày trên trình duyệt. Chạy `python3 -m chonoi.live --mode day`, mở địa chỉ in ra, dùng WASD để di chuyển, Space để bắt cá và E để hái, cập bến hoặc thao tác tại quán. R bắt đầu lại từ buổi sáng. Em giữ contract headless v1.0 để chạy lại các test ban đầu.
+
+Trong lượt day, cá bơi ngang, quay đầu ở mép và có đàn mới bơi vào theo lịch nếu đã bắt bớt cá. Chạy lại với cùng seed và cùng input để thử lại tình huống cũ.
