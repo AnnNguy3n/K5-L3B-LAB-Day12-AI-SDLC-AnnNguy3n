@@ -28,3 +28,4 @@
 ## Skills / hooks của nhóm
 - `sh tools/test_phase1.sh`: chạy cả bộ test từ thư mục gốc trước khi gắn tag.
 - `sh tools/replay_phase1.sh`: chạy lượt bắt cá đến thanh toán bằng seed 1. Đường dẫn in ra chứa hai log JSONL và file kho thực tế.
+- Phase 2: chạy `python3 -m chonoi.live --mode day` để kiểm bàn giao kho trong một cửa sổ. Phần chuyển buổi nằm trong live vì headless v1.0 kiểm riêng hai mode.

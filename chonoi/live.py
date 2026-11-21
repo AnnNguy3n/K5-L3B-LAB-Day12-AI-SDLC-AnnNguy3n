@@ -38,7 +38,8 @@ class LiveGame:
     """Một lượt chơi + luồng nền bước 60 tick/s. Mọi truy cập trạng thái đi qua khóa."""
 
     def __init__(self, mode, tuning, scenario, seed, inventory=None, inventory_out=None):
-        self._args = (mode, tuning, scenario, seed, inventory)
+        self.seed = seed
+        self._args = ("gather" if mode == "day" else mode, tuning, scenario, seed, inventory)
         self.mode = mode
         self.tuning = tuning
         self.inventory_out = inventory_out
@@ -49,6 +50,7 @@ class LiveGame:
 
     def _reset(self):
         self.session = Session(*self._args)
+        self.morning_result = None
         self.inputs = LiveInputs()
         self.events = []
         self._saved = False
@@ -89,6 +91,12 @@ class LiveGame:
         for row in s.step(self.inputs.advance()):
             self.events.append(row)
         del self.events[:-RECENT_EVENTS]
+        if self.mode == "day" and s.done and s.mode == "gather":
+            items = s.sim.inventory_items()
+            self.morning_result = {"reason": s.sim.reason, "items": items}
+            self.session = Session("quan", self.tuning, {}, self.seed, inventory=items)
+            self.inputs = LiveInputs()
+            return
         if s.done and not self._saved:
             self._saved = True
             if self.inventory_out:
@@ -101,7 +109,9 @@ class LiveGame:
     def state_json(self) -> bytes:
         with self._lock:
             snap = self.session.snapshot()
-            snap["meta"] = self.tuning[self.mode]
+            snap["meta"] = self.tuning[self.session.mode]
+            if self.mode == "day":
+                snap["day"] = {"morning": self.morning_result}
             snap["events"] = list(self.events)
             snap["finished"] = self.session.done
             snap["reason"] = self.session.sim.reason if self.session.done else None
@@ -215,7 +225,7 @@ class LiveServer:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="chonoi.live", description="Chơi trực tiếp trên trình duyệt (starter).")
-    p.add_argument("--mode", required=True, choices=["gather", "quan"])
+    p.add_argument("--mode", required=True, choices=["gather", "quan", "day"])
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--port", type=int, default=8000, help="0 = cổng ngẫu nhiên")
     p.add_argument("--host", default="127.0.0.1")
@@ -229,7 +239,7 @@ def main(argv=None) -> int:
         if a.inventory_out and a.mode != "gather":
             raise BadInput("--inventory-out chỉ dùng với gather")
         tuning = load_contract()["tuning"]
-        scenario = load_scenario(a.scenario, a.mode, tuning)
+        scenario = load_scenario(a.scenario, "gather" if a.mode == "day" else a.mode, tuning)
         inventory = read_inventory(a.inventory) if a.inventory else None
         if inventory is not None and "stock" in scenario:
             raise BadInput("vừa có quan.stock vừa có --inventory")

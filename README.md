@@ -54,3 +54,7 @@ Hết giờ mỗi phase thì gắn tag rồi đi tiếp; chỗ chưa xong ghi tr
 
 - Dùng AI thoải mái; **không sao chép repo của nhóm khác**; bằng chứng phải thật.
 - Nhân vật, bối cảnh là bản gốc của lab; asset ngoài chỉ dùng CC0/CC-BY/MIT hoặc tự tạo, ghi nguồn trong `CREDITS.md`. Không commit API key, token, `.env`.
+
+## Sáng tạo của nhóm
+
+Trong bài cá nhân, em thêm chế độ chơi trọn ngày trên trình duyệt. Chạy `python3 -m chonoi.live --mode day`, mở địa chỉ in ra, dùng WASD để di chuyển, Space để bắt cá và E để hái, cập bến hoặc thao tác tại quán. R bắt đầu lại từ buổi sáng. Em giữ contract headless v1.0 để chạy lại các test ban đầu.

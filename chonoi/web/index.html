@@ -74,7 +74,12 @@ addEventListener("blur", () => { down.clear(); pushInput(); });
 async function poll() {
   try {
     const r = await fetch("/state", { cache: "no-store" });
+    const previousMode = snap && snap.mode;
     snap = await r.json();
+    if (previousMode && previousMode !== snap.mode) {
+      down.clear();
+      pushInput();
+    }
     offline = false;
   } catch (e) { offline = true; }
   setTimeout(poll, 16);
