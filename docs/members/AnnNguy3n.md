@@ -1,0 +1,6 @@
+# Nguyễn Hữu An (@AnnNguy3n) — phản tư cá nhân (≤ 200 từ)
+
+- Tôi đã làm (kèm link commit):
+- Tôi đã review (kèm link):
+- AI sai ở đâu và tôi phát hiện thế nào:
+- Điều tôi học được:

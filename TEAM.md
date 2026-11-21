@@ -1,21 +1,13 @@
-# TEAM
+# Nhóm AnnNguy3n
 
-**Tên nhóm:** …  **Số người:** …  (khớp `team_size` trong `game.contract.json`)
+Nguyễn Hữu An thực hiện bài lab cá nhân. Số thành viên là **1**.
 
-| Thành viên | GitHub handle | Module chính | Vai quy trình | Người dự phòng cho |
+| Thành viên | MSSV | GitHub handle | Module chính | Vai quy trình |
 |---|---|---|---|---|
-| | | `sim/gather` | | |
-| | | `sim/quan` | | |
-| | | `client/ui` | | |
-| | | `qa` | | |
+| Nguyễn Hữu An | 2A202604024 | @AnnNguy3n | `sim/gather`, `sim/quan`, `client/ui`, QA | PO, tích hợp, kiểm thử và phát hành |
 
-**Vai quy trình:** PO (đầu mối hỏi giảng viên, giữ `docs/clarify.md`) · Integrator (giữ `docs/contracts/`, gắn tag) · QA lead · Scrum/Release. Có thể kiêm.
+## Cách làm việc cá nhân
 
-## Thỏa thuận làm việc nhóm (điền trong 15 phút kickoff, ≤ 10 dòng)
-
-- Kênh liên lạc: …
-- Khi bất đồng về thiết kế: … (ví dụ: nói 2 phút, không xong thì Integrator quyết và ghi lại lý do)
-- Khi ai đó trễ hoặc vướng quá 10 phút: … (ví dụ: nói ngay trong kênh, người dự phòng nhận việc)
-- Giờ standup giữa phase: …
-- Cách đọc code của nhau (tùy chọn): … (ví dụ: mỗi người đọc lát kế bên; PR hoặc xem trực tiếp)
-- Cách làm việc với Git: … (ví dụ: push thẳng nhánh chính / nhánh ngắn rồi gộp; thống nhất ai gắn tag)
+- Lập kế hoạch theo phase và ghi câu hỏi cần giảng viên giải đáp vào `docs/clarify.md`.
+- Tự rà soát thay đổi và chạy bộ test trước khi đẩy code.
+- Ghi kết quả kiểm chứng vào `docs/verification/phase-n.md` và gắn tag khi kết thúc mỗi phase.
