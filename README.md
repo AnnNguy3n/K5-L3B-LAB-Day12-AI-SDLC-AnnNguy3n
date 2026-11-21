@@ -13,15 +13,17 @@ Cách làm việc kỹ thuật là **tự do** (push thẳng, nhánh + PR, pair,
 4. **Gắn tag** `phase-1` … `phase-4` đúng hạn; chạy được tại từng tag.
 5. **Ghi chép tối thiểu:** `docs/verification/phase-n.md`, `docs/clarify.md`, `docs/ai-usage-log.md`, `docs/retro.md`, `docs/members/<handle>.md`.
 
-## Bắt đầu nhanh
+## Chạy bài từ một bản clone sạch
 
-```bash
-git clone <fork-của-nhóm> && cd <fork-của-nhóm>
-PYTHONPATH=tests:. python3 -m unittest discover -s tests -v        # smoke test
-python3 -m chonoi.live --mode gather                                # chơi thử trên trình duyệt (tùy chọn)
+```sh
+git clone https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n.git
+cd K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n
+python3 -m chonoi.live --mode day --port 0
 ```
 
-Game cần chế độ **headless** theo Test Contract (`python3 -m chonoi.headless --mode gather|quan …`) để được chạy và chấm tự động. **Công nghệ không ràng buộc**: khung Python trong `chonoi/` chỉ là gợi ý, chi tiết ở [`docs/STARTER.md`](docs/STARTER.md).
+Em dùng Python 3 và thư viện chuẩn. Mở địa chỉ localhost được in ra, bấm **Chơi** để bắt đầu. WASD hoặc phím mũi tên để di chuyển, **E** để hái, cập bến, nấu và phục vụ, **Space** để bắt cá. **P/Esc** tạm dừng. Trong Shop, **1** mua oxy, **2** mua áo phao, **Enter** đóng Shop. **R** bắt đầu lại.
+
+Chạy `sh tools/test_phase1.sh` để kiểm cả bộ test, hoặc `python3 tools/check_submission.py` để phát lại demo hai lần và đối chiếu từng byte. Điểm bằng tổng thu (cả tiền boa) cộng 100 lần phần nguyên của uy tín. Mua nâng cấp trừ tiền hiện có, còn tổng thu được giữ để tính điểm.
 
 ## Tự do sáng tạo
 
@@ -57,18 +59,10 @@ Hết giờ mỗi phase thì gắn tag rồi đi tiếp; chỗ chưa xong ghi tr
 
 ## Sáng tạo của nhóm
 
-Trong bài cá nhân, em thêm chế độ chơi trọn ngày trên trình duyệt. Chạy `python3 -m chonoi.live --mode day`, mở địa chỉ in ra, dùng WASD để di chuyển, Space để bắt cá và E để hái, cập bến hoặc thao tác tại quán. R bắt đầu lại từ buổi sáng. Em giữ contract headless v1.0 để chạy lại các test ban đầu.
+Em làm thêm dòng nước lũ (`current`) theo TICKET-03. Dòng báo trước ở tick 1680, bắt đầu đẩy nhân vật đủ sâu ở 1800 và hết ở 2280. Em kiểm cả lượt dòng vừa bắt đầu thì hết giờ. [Test dòng lũ](tests/test_campaign_contract.py) · [Kết quả kiểm thử](docs/proof/bo-sung/tests.txt)
 
-Trong lượt day, cá bơi ngang, quay đầu ở mép và có đàn mới bơi vào theo lịch nếu đã bắt bớt cá. Chạy lại với cùng seed và cùng input để thử lại tình huống cũ.
+## Bản bổ sung trên main
 
-## Bản nộp cá nhân v1.0.0
+Bốn tag và Release v1.0.0 lưu bài em nộp ban đầu. Trên main, em bổ sung vòng ngày có Shop và kho cá thể theo Test Contract v1.2. Trong demo mới, cá lóc còn 98,938 điểm tươi khi vào bếp. Giá món là 59k, boa 11k, tổng thu 70k và điểm cuối lượt là 370. [Log từng tick sự kiện](docs/proof/bo-sung/luot-choi.txt) · [Ảnh cuối lượt](docs/proof/bo-sung/so-cuoi-ngay.png)
 
-Em làm Phase 2–4 ở nhà theo phạm vi tự chọn vì chưa có ticket trên lớp. Sổ bán hàng cuối ngày ghi số đơn đã trả, tiền boa và tổng thu. Em dùng các lệnh sau để mở game, chạy demo và kiểm tra hồi quy.
-
-```sh
-python3 -m chonoi.live --mode day
-python3 -m tools.demo_day
-sh tools/test_phase1.sh
-```
-
-[Báo cáo Phase 1](docs/verification/phase-1.md) · [Phase 2](docs/verification/phase-2.md) · [Phase 3](docs/verification/phase-3.md) · [Phase 4](docs/verification/phase-4.md) · [Retro cá nhân](docs/retro.md)
+[Đối chiếu tiêu chí chấm](docs/verification/bo-sung.md) · [Báo cáo Phase 1](docs/verification/phase-1.md) · [Phase 2](docs/verification/phase-2.md) · [Phase 3](docs/verification/phase-3.md) · [Phase 4](docs/verification/phase-4.md) · [Retro cá nhân](docs/retro.md)

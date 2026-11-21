@@ -25,3 +25,7 @@ Lớp mô phỏng phát tên và dữ liệu sự kiện. Session thêm `type`, 
 | GatherSim, phần cần làm | `dive`, `surface` | `pos` |
 | GatherSim, phần cần làm | `oxygen_empty`, `choke`, `faint`, `gather`, `hold_full`, `fish_caught` | Cần đối chiếu trường dữ liệu với PRD-0. |
 | QuanSim, phần cần làm | Các sự kiện về khách đến, chọn món, `customer_left`, `cook_started`, `dish_ready`, `dish_picked`, `served`, `paid` | Cần đối chiếu danh sách đầy đủ, tên và trường dữ liệu với mục E của PRD-0. |
+
+## Bản bổ sung theo v1.2
+
+Luồng mặc định dùng kho cá thể ở cả headless và trình duyệt. Em lưu cách đổi fixture, thứ tự tích hợp và lý do còn giữ preset cũ trong [quyết định đổi kho](../adr/0001-kho-ca-the.md). Các ví dụ kho đếm phía trên thuộc Phase 1.

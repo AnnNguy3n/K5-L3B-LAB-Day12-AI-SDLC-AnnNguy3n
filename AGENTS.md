@@ -31,3 +31,4 @@
 - Phase 2: chạy `python3 -m chonoi.live --mode day` để kiểm bàn giao kho trong một cửa sổ. Phần chuyển buổi nằm trong live vì headless v1.0 kiểm riêng hai mode.
 - Phase 3: các tham số cá bơi của lượt day nằm ở `chonoi/sim/river_live.json`. Chạy `python3 -m unittest tests.test_live_fish -v` khi đổi chuyển động hoặc lịch sinh đàn.
 - Phase 4: chạy `python3 -m tools.demo_day` để đối chiếu số liệu sổ bán hàng với ảnh cuối ngày trong báo cáo.
+- Sau đổi kho: `python3 tools/check_submission.py` phát lại một ngày hai lần bằng manifest hiện tại và so từng byte với log. `sh tools/replay_phase1.sh` chọn v1.0 cho fixture kho đếm.

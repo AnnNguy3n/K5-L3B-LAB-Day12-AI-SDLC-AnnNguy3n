@@ -3,7 +3,7 @@
   "team": "AnnNguy3n",
   "team_size": 1,
   "build_cmd": "true",
-  "run_cmd": "python3 -m chonoi.live --mode gather",
+  "run_cmd": "python3 -m chonoi.live --mode day --port 0",
   "headless_cmd": "python3 -m chonoi.headless",
   "tuning": {
     "tick_hz": 60,
@@ -206,6 +206,13 @@
             "from_day": 3
           }
         ]
+      },
+      "current": {
+        "interval_ticks": 1800,
+        "duration_ticks": 480,
+        "warning_ticks": 120,
+        "min_depth": 10,
+        "speed": 1.5
       }
     },
     "quan": {
@@ -445,5 +452,7 @@
       "spoiled_below": 30
     }
   },
-  "extensions": []
+  "extensions": [
+    "current"
+  ]
 }

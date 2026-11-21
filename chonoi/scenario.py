@@ -60,6 +60,10 @@ def validate_block(block, mode, tuning):
     allowed = GATHER_KEYS if mode == "gather" else QUAN_KEYS
     if mode == "gather" and "freshness" in tuning:
         allowed = allowed | {"monsters"}
+        if "current" in tuning["gather"]:
+            allowed |= {"random_current", "current_direction"}
+            if type(block.get("random_current", True)) is not bool or (type(block.get("current_direction", 1)) is not int or block.get("current_direction", 1) not in (-1,1)):
+                raise BadInput("cấu hình hướng hoặc lịch dòng lũ sai")
     extra = set(block) - allowed
     if extra:
         raise BadInput(f"trường lạ/chưa hỗ trợ trong {mode}: {sorted(extra)}")

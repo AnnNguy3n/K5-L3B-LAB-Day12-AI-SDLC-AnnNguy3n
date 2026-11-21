@@ -179,6 +179,9 @@ class GatherSim:
         self.reason = reason
         events.append(("gather_end", {"reason": reason, "inventory": {"items": self.inventory_items()}}))
 
+    def _drift(self):
+        return 0.0
+
     def _move(self, inp):
         speed = self.t["swim_speed"]
         mx, md = inp.move
@@ -186,8 +189,9 @@ class GatherSim:
         if (mx, md) != (0.0, 0.0):
             self.heading = math.degrees(math.atan2(md, mx)) % 360
         b = self.t["bounds"]
+        drift = self._drift()
         for i, axis in enumerate(AXES):
-            self.pos[i] += self.vel[i] / self.hz
+            self.pos[i] += (self.vel[i] + (drift if i == 0 else 0)) / self.hz
             lo, hi = b[axis]
             if self.pos[i] <= lo:
                 self.pos[i] = lo

@@ -50,6 +50,10 @@ class Pantry:
 class FreshGather(GatherSim):
     def __init__(self, tuning, scenario, streams, ids, day=1):
         super().__init__(tuning, dict(scenario, hold=[], fish=scenario.get("fish", [])), streams, ids)
+        self.river_tick = 0
+        self.flow = None
+        self.flow_settings = self.t.get("current") if scenario.get("random_current", True) else None
+        self.fixed_direction = scenario.get("current_direction")
         self.schools = Schools(self, self.t, scenario)
         self.encounters = Encounters(self, scenario, day)
         for fish, source in zip(self.fish, scenario.get("fish", [])):
@@ -64,6 +68,39 @@ class FreshGather(GatherSim):
 
     def _age_hold(self, events):
         self.pantry.age(events)
+        self.river_tick += 1
+        spec = self.flow_settings
+        if not spec:
+            return
+        if self.flow:
+            self.flow["ticks_left"] -= 1
+            if self.flow["ticks_left"] == 0:
+                self._end_flow(events, "elapsed")
+        cycle = self.river_tick % spec["interval_ticks"]
+        if cycle == spec["interval_ticks"] - spec["warning_ticks"]:
+            events.append(("current_warning", {"starts_at_phase_tick": self.river_tick + spec["warning_ticks"]}))
+        if cycle == 0:
+            direction = self.fixed_direction or self.rng.get("current").choice([-1, 1])
+            self.flow = {"direction": direction, "ticks_left": spec["duration_ticks"]}
+            events.append(("current_start", {"direction": direction, "duration_ticks": spec["duration_ticks"]}))
+
+    def _end_flow(self, events, reason):
+        events.append(("current_end", {"direction": self.flow["direction"], "reason": reason}))
+        self.flow = None
+
+    def _finish(self, reason, events):
+        if self.flow:
+            # Dòng kết thúc trước khi ghi nhận ngất hoặc bàn giao kho.
+            faint = events.pop() if events and events[-1][0] == "faint" else None
+            self._end_flow(events, "phase_end")
+            if faint:
+                events.append(faint)
+        super()._finish(reason, events)
+
+    def _drift(self):
+        if self.flow and self.pos[1] >= self.flow_settings["min_depth"]:
+            return self.flow["direction"] * self.flow_settings["speed"]
+        return 0.0
 
     def _add_items(self, kind, quantity):
         for _ in range(quantity):
@@ -76,7 +113,7 @@ class FreshGather(GatherSim):
 
     def snapshot(self):
         return dict(super().snapshot(), hold=self.pantry.public(self.hold), fish=sort_by_id(self.fish),
-                    monsters=self.encounters.monsters)
+                    monsters=self.encounters.monsters, current=self.flow)
 
     def step(self, inp):
         events = super().step(inp)

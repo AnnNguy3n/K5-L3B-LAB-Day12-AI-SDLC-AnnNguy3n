@@ -227,6 +227,10 @@ class CampaignLive(LiveGame):
         with self._lock:
             game = self.session
             state = game.snapshot()
+            if self.screen == "evening":
+                available = game.sim._available()
+                state["cookable"] = [k for k in sorted(game.plan["dishes"])
+                                     if all(available[x] >= n for x, n in game.sim.menu[k]["recipe"].items())]
             state.update(meta=self.tuning[game.phase], events=self.events, finished=game.done,
                          error=self.error, reason=game.reason if game.done else None,
                          sales=self.sales, tips=self.tips, campaign=True, screen=self.screen, shift=self.shift)

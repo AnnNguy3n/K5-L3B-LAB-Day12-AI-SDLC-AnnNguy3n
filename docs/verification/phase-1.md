@@ -1,5 +1,8 @@
 # Kiểm chứng Phase 1 · Nguyễn Hữu An
 
+Phần dưới ghi kết quả tại tag `phase-1`. Em ghi những thay đổi sau mốc này trong [bảng đối chiếu của bản bổ sung](bo-sung.md).
+
+
 Em bắt đầu với giỏ rỗng và đặt một đàn cá lóc gần bến để lượt thử ngắn, dễ làm lại. Sau khi bắt cá và cập bến, em dùng đúng file kho vừa xuất để mở quán. Cá lóc bán được 60, khách boa 12. Cuối ca tiền là 72, uy tín 3,2 và điểm 372.
 
 | Nội dung | Cách em kiểm | Kết quả và bằng chứng |

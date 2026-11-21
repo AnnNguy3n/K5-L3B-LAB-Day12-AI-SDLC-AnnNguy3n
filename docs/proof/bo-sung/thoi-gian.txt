@@ -1,0 +1,2 @@
+{"days": 1, "seed": 1, "snapshot_every": 600, "elapsed_seconds": 0.449, "end": {"sim_tick": 22200, "mode": "day", "state": "finished", "money": 0, "earned": 0, "reputation": 3.0, "score": 300, "days_completed": 1, "type": "end", "ticks": 22200, "reason": "days_complete"}}
+{"days": 5, "seed": 1, "snapshot_every": 600, "elapsed_seconds": 2.151, "end": {"sim_tick": 111000, "mode": "day", "state": "finished", "money": 0, "earned": 0, "reputation": 3.0, "score": 300, "days_completed": 5, "type": "end", "ticks": 111000, "reason": "days_complete"}}

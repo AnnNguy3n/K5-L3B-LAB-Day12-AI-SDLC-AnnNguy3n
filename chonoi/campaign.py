@@ -100,6 +100,8 @@ class Campaign:
 
     def step(self, inp, buy=None):
         self.events = []
+        if self.done:
+            return
         self.tick += 1
         if inp.pressed("pause"):
             self.paused = not self.paused
@@ -126,7 +128,7 @@ class Campaign:
                 self.event("phase_start", {})
 
     def shop_tick(self, inp, buy):
-        self.shop_time -= 1
+        self.shop_time = max(0, self.shop_time - 1)
         if buy:
             levels = self.tuning["shop"]["upgrades"].get(buy)
             level = self.upgrades.get(buy, 0)

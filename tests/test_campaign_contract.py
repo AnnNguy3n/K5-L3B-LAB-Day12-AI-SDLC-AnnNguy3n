@@ -127,3 +127,23 @@ class CampaignContract(unittest.TestCase):
 
     def test_demo_proof(self):
         subprocess.run(["python3","tools/check_submission.py"],check=True,capture_output=True)
+
+    def test_current_warning_drift_and_expiry(self):
+        game = Campaign("gather",TUNING,{"player":{"pos":[20,0]},"current_direction":1,
+                        "random_fish":False,"monsters":[]},1)
+        ip = InputPlayer([{"tick":1200,"move":[0,1]},{"tick":1400,"move":[0,0]}])
+        seen = []
+        for t in range(2280):
+            game.step(ip.advance(t))
+            seen.extend((r["tick"],r["name"]) for r in game.events if r["name"].startswith("current_"))
+        self.assertEqual(seen,[(1680,"current_warning"),(1800,"current_start"),(2280,"current_end")])
+        self.assertAlmostEqual(game.sim.pos[0],32)
+        self.assertEqual(game.sim.vel,[0,0])
+
+    def test_last_tick_current_precedes_gather_end(self):
+        game = Campaign("gather",TUNING,{"time_left_ticks":1800,"current_direction":-1,"random_fish":False},1)
+        ip=InputPlayer([])
+        for t in range(1800):
+            game.step(ip.advance(t))
+        self.assertEqual([r["name"] for r in game.events],["current_start","current_end","gather_end"])
+        self.assertEqual(game.events[1]["data"]["reason"],"phase_end")

@@ -26,8 +26,20 @@ def load_contract(path=LEGACY_PATH) -> dict:
             c = json.load(f)
     except (OSError, ValueError) as e:
         raise BadInput(f"không đọc được {path}: {e}")
-    if c.get("contract_version") == "1.0":
+    if not isinstance(c, dict):
+        raise BadInput("manifest cần là object")
+    version = c.get("contract_version")
+    if version == "1.0":
         validate_tuning(c.get("tuning"))
+    elif version == "1.2":
+        t = c.get("tuning", {})
+        needed = {"tick_hz","gather","quan","menu","shop","score","day_plan","freshness"}
+        if not isinstance(t, dict) or not needed <= t.keys() or t["tick_hz"] != 60:
+            raise BadInput("manifest v1.2 thiếu cấu hình hoặc sai nhịp mô phỏng")
+        if not isinstance(t["day_plan"], list) or len(t["day_plan"]) != 5:
+            raise BadInput("v1.2 cần kế hoạch năm ngày")
+    else:
+        raise BadInput("phiên bản contract chưa hỗ trợ")
     return c
 
 

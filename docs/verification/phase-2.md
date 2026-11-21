@@ -1,5 +1,8 @@
 # Phase 2 · Bàn giao kho trong cùng lượt
 
+Phần dưới ghi kết quả tại tag `phase-2`. Em ghi những thay đổi sau mốc này trong [bảng đối chiếu của bản bổ sung](bo-sung.md).
+
+
 Em chạy `python3 -m chonoi.live --mode day`. Khi kết thúc buổi sáng, quán nhận kho trong bộ nhớ và bắt đầu ở tick 0. Phím R đưa lượt chơi về buổi sáng ban đầu.
 
 | Tình huống em thử | Kết quả |

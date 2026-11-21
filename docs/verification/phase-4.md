@@ -1,5 +1,8 @@
 # Phase 4 · Kiểm chứng cuối ngày
 
+Phần dưới ghi kết quả tại tag `phase-4`. Em ghi những thay đổi sau mốc này trong [bảng đối chiếu của bản bổ sung](bo-sung.md).
+
+
 Em chạy `python3 -m tools.demo_day` từ thư mục gốc. Nhân vật bắt đầu với giỏ rỗng cạnh đàn cá, bắt một cá lóc rồi bơi về bến. Khi vào quán, nhân vật đi từ giữa sàn đến bếp, nấu món, bưng ra bàn và chờ khách ăn xong. Lượt chạy tiếp đến khi đóng cửa. Các lần nhấn phím được ghi trong [kịch bản demo](../../tools/demo_day.py).
 
 | Điều em đối chiếu | Kết quả |

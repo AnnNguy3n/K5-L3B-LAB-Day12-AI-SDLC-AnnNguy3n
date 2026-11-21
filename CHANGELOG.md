@@ -18,3 +18,9 @@
 
 - Em thêm sổ bán hàng cuối ngày, đếm đơn đã thanh toán và tiền boa từ sự kiện trả tiền.
 - Em lưu lượt demo có thể chạy lại cùng ảnh sổ cuối ngày và kết quả hồi quy.
+
+## Bổ sung sau v1.0.0
+
+- Em đổi schema kho mặc định từ số lượng sang cá thể có ID, loại và độ tươi. Fixture mới dùng mảng ở gather.hold và quan.stock; kho rỗng có items là mảng rỗng. Em giữ lệnh phát lại v1.0 cho dữ liệu cũ.
+- Em sửa đơn hàng và thứ tự cuối tick theo PRD-0. Test cũ cho khách bỏ đi ngay trước thao tác giao món đã được thay bằng test giao thành công đúng hạn.
+- Em bổ sung vòng ngày, pause, Shop, kế hoạch năm ngày, cá sấu, đàn cá theo seed và dòng lũ. Demo cuối lượt và ảnh mới được lưu riêng sau các tag đã nộp.
