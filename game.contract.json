@@ -1,5 +1,7 @@
 {
-  "contract_version": "1.2",
+  "contract_version": "1.3",
+  "soak_cmd": "python3 -m chonoi.soak",
+  "bench_cmd": "python3 -m chonoi.bench",
   "team": "AnnNguy3n",
   "team_size": 1,
   "build_cmd": "true",

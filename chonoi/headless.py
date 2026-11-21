@@ -35,7 +35,7 @@ def _int(name):
 def main(argv=None) -> int:
     p = _Parser(prog="chonoi.headless")
     p.add_argument("--mode", required=True, choices=["gather", "quan", "day"])  # `day` có từ v1.1
-    p.add_argument("--rules", choices=["1.0", "1.2"], default="1.2")
+    p.add_argument("--rules", choices=["1.0", "1.2", "1.3"], default="1.3")
     p.add_argument("--days", type=_int("days"))
     p.add_argument("--seed", required=True, type=_int("seed"))
     p.add_argument("--ticks", required=True, type=_int("ticks"))
@@ -67,7 +67,7 @@ def main(argv=None) -> int:
         contract = load_contract(LEGACY_PATH if a.rules == "1.0" else DEFAULT_PATH)
         tuning = contract["tuning"]
         scenario = load_scenario(a.scenario, a.mode, tuning)
-        if a.rules == "1.2":
+        if a.rules != "1.0":
             frames = load_frames(a.inputs, BUTTONS, allow_buy=True)
             inventory = read_inventory(a.inventory, individual=True) if a.inventory else None
         else:
@@ -79,7 +79,7 @@ def main(argv=None) -> int:
         sys.stderr.write(f"đầu vào sai: {e}\n")
         return 2
     try:
-        if a.rules == "1.2":
+        if a.rules != "1.0":
             run_campaign(a.mode, tuning, scenario, a.seed, frames, a.ticks, a.out, a.snapshot_every,
                          a.days or 1, inventory, a.inventory_out)
             return 0

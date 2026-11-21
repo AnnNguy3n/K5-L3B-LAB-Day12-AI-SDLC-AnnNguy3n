@@ -84,7 +84,8 @@ class Campaign:
         if self.day > 1:
             morning["hold"] = [dict(i, id=self.ids.new("I")) for i in morning.get("hold", [])]
         self.sim = FreshGather(dict(self.tuning, gather=config), morning, self.streams, self.ids, self.day)
-        self.plan = self.plans[self.day]
+        plan_day = (self.day - 1) % len(self.plans) + 1
+        self.plan = dict(self.plans[plan_day], day=self.day)
         if self.mode == "day":
             self.event("day_start", {})
             self.event("day_plan", {k: self.plan[k] for k in ("dishes", "ingredients")})

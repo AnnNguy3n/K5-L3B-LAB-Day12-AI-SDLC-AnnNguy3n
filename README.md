@@ -66,3 +66,14 @@ Em làm thêm dòng nước lũ (`current`) theo TICKET-03. Dòng báo trước 
 Bốn tag và Release v1.0.0 lưu bài em nộp ban đầu. Trên main, em bổ sung vòng ngày có Shop và kho cá thể theo Test Contract v1.2. Trong demo mới, cá lóc còn 98,938 điểm tươi khi vào bếp. Giá món là 59k, boa 11k, tổng thu 70k và điểm cuối lượt là 370. [Log từng tick sự kiện](docs/proof/bo-sung/luot-choi.txt) · [Ảnh cuối lượt](docs/proof/bo-sung/so-cuoi-ngay.png)
 
 [Đối chiếu tiêu chí chấm](docs/verification/bo-sung.md) · [Báo cáo Phase 1](docs/verification/phase-1.md) · [Phase 2](docs/verification/phase-2.md) · [Phase 3](docs/verification/phase-3.md) · [Phase 4](docs/verification/phase-4.md) · [Retro cá nhân](docs/retro.md)
+
+### Kiểm tra Phase 4
+
+Manifest hiện khai contract **1.3**, dùng kho cá thể và hỗ trợ hai lệnh `soak_cmd`, `bench_cmd`. Em dùng lệnh đầu để kiểm tra mười ngày liên tục, lệnh sau để đo render của game trên trình duyệt. Benchmark cần Chrome hoặc Chromium; có thể đặt biến `CHROME_BIN` nếu trình duyệt nằm ở đường dẫn riêng.
+
+```sh
+python3 -m chonoi.soak --seed 7 --days 10 --out /tmp/chonoi-soak.json
+python3 -m chonoi.bench --seed 42 --duration 30 --out /tmp/chonoi-bench.json
+```
+
+[Báo cáo và giới hạn phép đo](docs/verification/phase-4.md#kiểm-tra-bổ-sung-trên-main)

@@ -300,8 +300,8 @@ class _Handler(BaseHTTPRequestHandler):
 class LiveServer:
     """Máy chủ + mô phỏng. port=0 -> cổng ngẫu nhiên (đọc `.port`)."""
 
-    def __init__(self, game: LiveGame, host="127.0.0.1", port=8000):
-        handler = type("Handler", (_Handler,), {"game": game})
+    def __init__(self, game: LiveGame, host="127.0.0.1", port=8000, handler_class=_Handler):
+        handler = type("Handler", (handler_class,), {"game": game})
         self.game = game
         self.httpd = ThreadingHTTPServer((host, port), handler)
         self.httpd.daemon_threads = True
@@ -329,7 +329,7 @@ class LiveServer:
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="chonoi.live", description="Chơi trực tiếp trên trình duyệt (starter).")
     p.add_argument("--mode", required=True, choices=["gather", "quan", "day"])
-    p.add_argument("--rules", choices=["1.0", "1.2"], default="1.2")
+    p.add_argument("--rules", choices=["1.0", "1.2", "1.3"], default="1.3")
     p.add_argument("--days", type=int, default=5)
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--port", type=int, default=8000, help="0 = cổng ngẫu nhiên")
@@ -343,7 +343,7 @@ def main(argv=None) -> int:
             raise BadInput("--inventory chỉ dùng với quan")
         if a.inventory_out and a.mode != "gather":
             raise BadInput("--inventory-out chỉ dùng với gather")
-        modern = a.rules == "1.2"
+        modern = a.rules != "1.0"
         if not 1 <= a.days <= 5:
             raise BadInput("số ngày phải từ 1 đến 5")
         tuning = load_contract(DEFAULT_PATH if modern else LEGACY_PATH)["tuning"]

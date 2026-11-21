@@ -1,0 +1,89 @@
+{
+  "seed": 7,
+  "days": 10,
+  "days_completed": 10,
+  "crashes": 0,
+  "results": [
+    {
+      "day": 1,
+      "earned": 43,
+      "reputation": 3.2,
+      "score": 343,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 2,
+      "earned": 43,
+      "reputation": 3.2,
+      "score": 343,
+      "harvested": 2,
+      "paid_orders": 0
+    },
+    {
+      "day": 3,
+      "earned": 86,
+      "reputation": 3.4000000000000004,
+      "score": 386,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 4,
+      "earned": 129,
+      "reputation": 3.6000000000000005,
+      "score": 429,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 5,
+      "earned": 129,
+      "reputation": 3.6000000000000005,
+      "score": 429,
+      "harvested": 2,
+      "paid_orders": 0
+    },
+    {
+      "day": 6,
+      "earned": 172,
+      "reputation": 3.8000000000000007,
+      "score": 472,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 7,
+      "earned": 172,
+      "reputation": 3.8000000000000007,
+      "score": 472,
+      "harvested": 2,
+      "paid_orders": 0
+    },
+    {
+      "day": 8,
+      "earned": 215,
+      "reputation": 4.000000000000001,
+      "score": 615,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 9,
+      "earned": 258,
+      "reputation": 4.200000000000001,
+      "score": 658,
+      "harvested": 2,
+      "paid_orders": 1
+    },
+    {
+      "day": 10,
+      "earned": 258,
+      "reputation": 4.200000000000001,
+      "score": 658,
+      "harvested": 2,
+      "paid_orders": 0
+    }
+  ],
+  "duration_s": 1.613
+}

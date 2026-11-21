@@ -32,3 +32,4 @@
 - Phase 3: các tham số cá bơi của lượt day nằm ở `chonoi/sim/river_live.json`. Chạy `python3 -m unittest tests.test_live_fish -v` khi đổi chuyển động hoặc lịch sinh đàn.
 - Phase 4: chạy `python3 -m tools.demo_day` để đối chiếu số liệu sổ bán hàng với ảnh cuối ngày trong báo cáo.
 - Sau đổi kho: `python3 tools/check_submission.py` phát lại một ngày hai lần bằng manifest hiện tại và so từng byte với log. `sh tools/replay_phase1.sh` chọn v1.0 cho fixture kho đếm.
+- Phase 4 bổ sung: `python3 -m chonoi.soak --seed 7 --days 10 --out /tmp/soak.json` kiểm nhiều ngày trong một tiến trình. `python3 -m chonoi.bench --seed 42 --duration 30 --out /tmp/bench.json` đo canvas thật bằng Chrome/Chromium.

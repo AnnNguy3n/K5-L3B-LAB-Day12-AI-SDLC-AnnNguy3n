@@ -4,7 +4,7 @@ Khi đọc lại PRD-0, TICKET-02 và TICKET-03, em thấy hai giả định là
 
 | Hạng mục trong README | Em đã kiểm được | Bằng chứng |
 |---|---|---|
-| Headless · 25 điểm | Chạy hai tiến trình bàn giao kho; file v1.2 giữ ID và độ tươi. Kho đếm cũ bị từ chối ở v1.2. Bộ kiểm 57/57 test đạt, gồm 46 test hồi quy và 11 test mới. Em kiểm đơn ở hạn chót, pause, mua nâng cấp, sinh cá, va chạm và dòng lũ. | [Test theo contract](../../tests/test_campaign_contract.py) · [Log hồi quy](../proof/bo-sung/tests.txt) |
+| Headless · 25 điểm | Chạy hai tiến trình bàn giao kho; file v1.2 giữ ID và độ tươi. Kho đếm cũ bị từ chối ở v1.2. Bản bổ sung đầu đạt 57/57 test. Sau khi thêm ba test Phase 4, em chạy lại và đạt [60/60 test](../proof/phase-4/tests-v1.3.txt). Em kiểm đơn ở hạn chót, pause, mua nâng cấp, sinh cá, va chạm và dòng lũ. | [Test theo contract](../../tests/test_campaign_contract.py) · [Log hồi quy](../proof/bo-sung/tests.txt) |
 | Làm việc nhóm · 25 điểm | Em làm một mình và khai một người. Git ghi được tiến độ, việc tích hợp và lần đổi yêu cầu. Em chưa có đánh giá chéo hay xác nhận cách tính phần làm việc nhóm cho bài cá nhân. | [TEAM](../../TEAM.md) · [Quyết định đổi kho](../adr/0001-kho-ca-the.md) |
 | Kiểm chứng · 15 điểm | Em xuất từng tag sang thư mục tạm, chạy đúng bộ test có tại tag. Bốn mốc lần lượt đạt 41, 43, 45 và 46 test. Các kiểm tra cho bản bổ sung chạy riêng. | [Kết quả theo tag và mã commit](../proof/bo-sung/tags.txt) |
 | Harness AI · 10 điểm | Em có lệnh chạy test, lệnh bàn giao kho cũ và lệnh đối chiếu toàn bộ log demo mới. Nhật ký ghi việc em dùng AI và chỗ em phải sửa lại giả định. | [AGENTS](../../AGENTS.md) · [Nhật ký AI](../ai-usage-log.md) |
@@ -18,4 +18,4 @@ Khi đọc lại PRD-0, TICKET-02 và TICKET-03, em thấy hai giả định là
 2. Em tính lại tiền món bằng phần nguyên của 60 × độ tươi / 100, được 59k. Khách trả ở tick 1284, tiền boa là phần nguyên của 59 × 0,2, được 11k.
 3. Em kiểm dòng cuối. Lượt chỉ hoàn tất sau khi đóng Shop ở tick 1369. Uy tín 3,2 cho 300 điểm uy tín, cộng 70 tiền thu thành 370 điểm.
 
-Để kiểm thời gian chạy, em dùng seed 1, không điều khiển và chụp snapshot mỗi 600 tick. Một ngày gồm 22.200 tick; năm ngày là 111.000 tick. Thời gian đo trên máy em nằm trong log. Em chưa đo FPS trên máy chấm, chưa có kết quả test ẩn và chưa có ticket Phase 4 để đối chiếu tính năng riêng. Các thay đổi trên main là phần làm bổ sung sau tag.
+Để kiểm thời gian chạy, em dùng seed 1, không điều khiển và chụp snapshot mỗi 600 tick. Một ngày gồm 22.200 tick; năm ngày là 111.000 tick. Thời gian đo trên máy em nằm trong log. Em đo FPS trên máy em trong [lần bổ sung Phase 4](phase-4.md#kiểm-tra-bổ-sung-trên-main). Em chưa có số đo của máy chấm, kết quả test ẩn hay toàn văn ticket Phase 4. Các thay đổi trên main là phần làm bổ sung sau tag.

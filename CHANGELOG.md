@@ -24,3 +24,8 @@
 - Em đổi schema kho mặc định từ số lượng sang cá thể có ID, loại và độ tươi. Fixture mới dùng mảng ở gather.hold và quan.stock; kho rỗng có items là mảng rỗng. Em giữ lệnh phát lại v1.0 cho dữ liệu cũ.
 - Em sửa đơn hàng và thứ tự cuối tick theo PRD-0. Test cũ cho khách bỏ đi ngay trước thao tác giao món đã được thay bằng test giao thành công đúng hạn.
 - Em bổ sung vòng ngày, pause, Shop, kế hoạch năm ngày, cá sấu, đàn cá theo seed và dòng lũ. Demo cuối lượt và ảnh mới được lưu riêng sau các tag đã nộp.
+
+## Contract 1.3 · Bổ sung kiểm chứng Phase 4
+
+- Em thêm lệnh chạy bot nhiều ngày liên tục và lệnh đo render ở 1280×720 vào manifest. Kho cá thể và phép tính giá theo độ tươi tiếp tục dùng luật v1.2.
+- HUD quán ghi “Sắp rời bàn” khi khách đang chờ và còn dưới một phần tư thời gian kiên nhẫn. Khách đang ăn được bỏ thanh chờ.

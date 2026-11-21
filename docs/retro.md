@@ -19,3 +19,7 @@ Nếu làm lại, em sẽ lưu một bản ticket ngay lúc nhận và tách ti�
 Lỗi em nhớ nhất là coi kiên nhẫn về 0 đồng nghĩa với việc khách rời bàn ngay. Em đọc lại thứ tự xử lý và thấy còn một lượt giao món trong chính tick đó. Em kiểm thêm trường hợp đồng hồ ca cũng về 0. Trong cùng bước, log lần lượt có served, paid rồi quan_end.
 
 Khi thử dòng lũ, em từng để Út Sen lặn ngay từ đầu và chờ tới tick 2280. Nhân vật ngất ở tick 1979. Em sửa tình huống thử bằng cách chờ trên mặt nước rồi mới lặn. Lần này em đo được trọn 480 tick dòng chảy, nhân vật trôi 12 mét và vận tốc tự bơi vẫn bằng 0.
+
+## Khi chạy đủ mười ngày
+
+Em chọn hai nút bông súng để bot luôn bàn giao kho có hàng. Có bốn ngày quán thu 0k vì thực đơn hôm đó cần nguyên liệu khác. Nhìn vào từng ngày giúp em giải thích được tổng thu 258k. Nếu mở rộng ca thử, em sẽ cho bot chọn nguyên liệu theo thực đơn để kiểm cả món cá ở những ngày này.
