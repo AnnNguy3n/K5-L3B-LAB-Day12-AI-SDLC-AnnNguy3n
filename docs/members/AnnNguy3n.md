@@ -1,7 +1,7 @@
-# Nguyễn Hữu An · Phase 1
+# Nguyễn Hữu An · Phản tư cá nhân
 
-Em làm bài cá nhân và dùng Codex hỗ trợ phần mô phỏng, test và báo cáo. Em bắt đầu bằng [hợp đồng kho và kế hoạch](https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n/commit/3e8e260), rồi làm [luật buổi sáng và ca tối](https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n/commit/a974b6b).
+Em làm bài ở nhà, dùng Codex hỗ trợ viết luật và dựng tình huống kiểm thử. [Phase 1](https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n/commit/a974b6b) giúp em hiểu vì sao phải theo một con cá từ giỏ đến kho rồi đến lúc khách trả tiền. Test kho ban đầu đặt sẵn nguyên liệu nên chưa kiểm được cả lượt.
 
-Phần em tự rà kỹ nhất là một con cá từ lúc vào giỏ đến khi trừ kho. Test starter cho sẵn nguyên liệu nên ban đầu em chỉ biết hai chế độ đọc được kho của nhau. Khi cho nhân vật bắt cá từ giỏ rỗng, em mới theo được cả lượt đến lúc khách trả 60 tiền món và 12 tiền boa. [Log buổi sáng](../proof/phase-1/gather-log.txt) · [Log buổi tối](../proof/phase-1/quan-log.txt)
+Ở [Phase 2](https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n/commit/054602c), em rà lại ba cách kết thúc buổi sáng. Sang [Phase 3](https://github.com/AnnNguy3n/K5-L3B-LAB-Day12-AI-SDLC-AnnNguy3n/commit/333dc33), em thử bắt F10 rồi kiểm ID của đàn mới và chạy lại cùng seed. Cuối cùng em so [ảnh sổ bán hàng](../proof/phase-4/so-ban-hang.png) với số liệu mô phỏng. Một con cá đem về cho một đơn, thu 72k gồm 12k tiền boa.
 
-Có lúc AI dựa vào trạng thái repo cũ và nhắc em điền lại hồ sơ nhóm. Em học được cách kiểm file hiện tại trước khi nhận một đề xuất. Với các chi tiết thiếu PRD, em ghi giả định riêng để sau này biết chính xác ca nào cần chạy lại.
+Có lần AI nhắc em điền lại hồ sơ đã hoàn tất. Em đọc TEAM.md và Git trước khi sửa. Điều em muốn làm tốt hơn là lưu ticket ngay từ đầu để phân biệt yêu cầu trên lớp với phần em tự thiết kế.

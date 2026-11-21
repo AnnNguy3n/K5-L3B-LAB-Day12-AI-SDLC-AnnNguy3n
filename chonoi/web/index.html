@@ -126,6 +126,20 @@ function eventLog(w, h) {
 function overlay(w, h) {
   if (offline) text("Mất kết nối tới máy chủ (đã tắt chưa?)", w / 2, 30, { align: "center", color: "#ff8a80", size: 16 });
   if (snap.error) text("Luật của nhóm báo lỗi — xem terminal. R để chơi lại.", w / 2, 52, { align: "center", color: "#ff8a80", size: 15 });
+  if (snap.finished && snap.day && snap.mode === "quan") {
+    const width = Math.min(w - 20, 390);
+    const x = w / 2, y = h / 2;
+    ctx.fillStyle = "#18302c"; ctx.fillRect(x - width / 2, y - 112, width, 224);
+    text("Sổ bán hàng cuối ngày", x, y - 75, { align: "center", size: 23, color: "#fff2ca" });
+    const items = Object.entries(snap.day.morning.items);
+    const stock = items.map(([k, n]) => (KIND_NAME[k] || k) + " ×" + n).join(", ");
+    text("Mang về: " + (stock || "giỏ rỗng"), x, y - 42, { align: "center" });
+    text("Đơn đã trả: " + snap.day.meals_paid + " · Tiền boa: " + snap.day.tips + "k", x, y - 12, { align: "center" });
+    text("Thu cả ngày: " + snap.earned + "k", x, y + 17, { align: "center", size: 18 });
+    text("Uy tín " + snap.reputation.toFixed(1) + " · Điểm " + snap.score, x, y + 44, { align: "center" });
+    text("R · Bắt đầu ngày mới", x, y + 84, { align: "center", color: "#efcc80" });
+    return;
+  }
   if (snap.finished) {
     ctx.fillStyle = "rgba(0,0,0,.55)"; ctx.fillRect(w / 2 - 190, h / 2 - 50, 380, 100);
     text("Buổi " + (snap.mode === "gather" ? "sáng" : "tối") + " kết thúc: " + (snap.reason || ""), w / 2, h / 2 - 12, { align: "center", size: 20 });

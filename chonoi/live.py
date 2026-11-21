@@ -52,6 +52,8 @@ class LiveGame:
     def _reset(self):
         self.session = Session(*self._args)
         self.morning_result = None
+        self.meals_paid = 0
+        self.tips = 0
         self.river_fish = RiverFish(self.session.sim) if self.mode == "day" else None
         self.inputs = LiveInputs()
         self.events = []
@@ -94,6 +96,9 @@ class LiveGame:
             self.river_fish.advance(s.sim)
         for row in s.step(self.inputs.advance()):
             self.events.append(row)
+            if self.mode == "day" and row["name"] == "paid":
+                self.meals_paid += 1
+                self.tips += row["data"]["tip"]
         del self.events[:-RECENT_EVENTS]
         if self.mode == "day" and s.done and s.mode == "gather":
             items = s.sim.inventory_items()
@@ -116,7 +121,7 @@ class LiveGame:
             snap = self.session.snapshot()
             snap["meta"] = self.tuning[self.session.mode]
             if self.mode == "day":
-                snap["day"] = {"morning": self.morning_result}
+                snap["day"] = {"morning": self.morning_result, "meals_paid": self.meals_paid, "tips": self.tips}
             snap["events"] = list(self.events)
             snap["finished"] = self.session.done
             snap["reason"] = self.session.sim.reason if self.session.done else None

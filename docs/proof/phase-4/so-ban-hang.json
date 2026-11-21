@@ -1,0 +1,16 @@
+{
+  "day": {
+    "morning": {
+      "reason": "docked",
+      "items": {
+        "ca_loc": 1
+      }
+    },
+    "meals_paid": 1,
+    "tips": 12
+  },
+  "finished": true,
+  "earned": 72,
+  "reputation": 3.2,
+  "score": 372
+}

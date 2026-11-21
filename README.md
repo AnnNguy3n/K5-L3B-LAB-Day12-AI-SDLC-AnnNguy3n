@@ -60,3 +60,15 @@ Hết giờ mỗi phase thì gắn tag rồi đi tiếp; chỗ chưa xong ghi tr
 Trong bài cá nhân, em thêm chế độ chơi trọn ngày trên trình duyệt. Chạy `python3 -m chonoi.live --mode day`, mở địa chỉ in ra, dùng WASD để di chuyển, Space để bắt cá và E để hái, cập bến hoặc thao tác tại quán. R bắt đầu lại từ buổi sáng. Em giữ contract headless v1.0 để chạy lại các test ban đầu.
 
 Trong lượt day, cá bơi ngang, quay đầu ở mép và có đàn mới bơi vào theo lịch nếu đã bắt bớt cá. Chạy lại với cùng seed và cùng input để thử lại tình huống cũ.
+
+## Bản nộp cá nhân v1.0.0
+
+Em làm Phase 2–4 ở nhà theo phạm vi tự chọn vì chưa có ticket trên lớp. Sổ bán hàng cuối ngày ghi số đơn đã trả, tiền boa và tổng thu. Em dùng các lệnh sau để mở game, chạy demo và kiểm tra hồi quy.
+
+```sh
+python3 -m chonoi.live --mode day
+python3 -m tools.demo_day
+sh tools/test_phase1.sh
+```
+
+[Báo cáo Phase 1](docs/verification/phase-1.md) · [Phase 2](docs/verification/phase-2.md) · [Phase 3](docs/verification/phase-3.md) · [Phase 4](docs/verification/phase-4.md) · [Retro cá nhân](docs/retro.md)

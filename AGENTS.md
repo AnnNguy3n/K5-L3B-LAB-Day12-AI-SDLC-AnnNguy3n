@@ -30,3 +30,4 @@
 - `sh tools/replay_phase1.sh`: chạy lượt bắt cá đến thanh toán bằng seed 1. Đường dẫn in ra chứa hai log JSONL và file kho thực tế.
 - Phase 2: chạy `python3 -m chonoi.live --mode day` để kiểm bàn giao kho trong một cửa sổ. Phần chuyển buổi nằm trong live vì headless v1.0 kiểm riêng hai mode.
 - Phase 3: các tham số cá bơi của lượt day nằm ở `chonoi/sim/river_live.json`. Chạy `python3 -m unittest tests.test_live_fish -v` khi đổi chuyển động hoặc lịch sinh đàn.
+- Phase 4: chạy `python3 -m tools.demo_day` để đối chiếu số liệu sổ bán hàng với ảnh cuối ngày trong báo cáo.
